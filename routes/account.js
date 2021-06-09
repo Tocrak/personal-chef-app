@@ -69,7 +69,7 @@ user.post('/register', async (req, res) => {
     }
 });
 
-user.post('/updatePassword', async (req, res) => {
+user.patch('/updatePassword', async (req, res) => {
     const user = await User.findById(req.session.user)
 
     if (user != null) {
@@ -100,7 +100,7 @@ user.post('/updatePassword', async (req, res) => {
     }
 });
 
-user.post('/deleteAccount', async (req, res) => {
+user.delete('/deleteAccount', async (req, res) => {
     const user = await User.findById(req.session.user)
 
     if (user != null) {
