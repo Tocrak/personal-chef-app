@@ -1,6 +1,11 @@
 const express = require('express'),
-      User = require('../models/user'),
-      chef = express.Router();
+    User = require('../models/user'),
+    food_dataset = require('../dataset/food_dataset.json'),
+    chef = express.Router();
+
+function getRandomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
 
 // function to calculate some basic macros
 // parameters: age, weight, height, gender, goal, bodyfat, activity_level, preset_diet, weight_goal, weight_goal_weekly_value
@@ -79,23 +84,84 @@ function calculateMacros(a, b, c, d, e, f, g, h, l, k) {
 function getCaloriesFromMacros(carbs, fats, proteins) {
     return 4 * carbs + 9 * fats + 4 * proteins
 }
+// 14164
 
+async function createMenu(macros_data) {
+    let req_calories = macros_data.calories,
+        //     min_carbs = macros_data.min_carbs,
+        //     min_fats = macros_data.min_fats,
+        //     min_proteins = macros_data.min_proteins,
+        //     max_carbs = macros_data.max_carbs,
+        //     max_fats = macros_data.max_fats,
+        //     max_proteins = macros_data.max_proteins;
+        week_menu = [[], [], [], [], [], [], []];
+
+
+    for (let i = 0; i < 7; i++) {
+        let current_callories = 0;
+        // current_fats = 0,
+        // current_proteins = 0,
+        // current_carbs = 0;
+
+        while (current_callories < req_calories * 0.9) {
+            let food_item = food_dataset[getRandomNumber(0, 14164)]
+
+            if (current_callories + food_item.Calories * 2 <= req_calories) {
+                week_menu[i].push({
+                    name: food_item.Name,
+                    calories: food_item.Calories,
+                    carbs: food_item.Carbos,
+                    fats: food_item.Fats,
+                    proteins: food_item.Proteins,
+                    servings: 2
+                });
+                current_callories += food_item.Calories * 2;
+            }
+
+        }
+    }
+    return week_menu;
+
+}
+
+function convertCmToInch(val) {
+    return parseFloat(val / 2.54).toFixed(1)
+}
+
+function convertKgToLbs(val) {
+    return parseFloat(val * 2.205).toFixed(1)
+}
 
 chef.post('/createMenu', async (req, res) => {
     const user = await User.findById(req.session.user)
     const data = req.body;
 
-    console.log(user)
-
     if (user != null) {
-    
-        macros_data = calculateMacros(data.age, data.weight, data.height,
-            data.gender, data.goal, data.bodyfat, data.activity_level,
-            data.preset_diet, data.weight_goal, data.weight_goal_weekly_value);
 
-        console.log(macros_data)
+        let macros_data = calculateMacros(data.age, convertKgToLbs(data.weight),
+            convertCmToInch(data.height), data.gender, data.goal,
+            data.bodyfat, data.activity_level, data.preset_diet, data.weight_goal,
+            data.weight_goal_weekly_value);
 
-        res.json(macros_data);
+        let week_menu = await createMenu(macros_data)
+
+        user.menu = {
+            monday: week_menu[0],
+            tuesday: week_menu[1],
+            wednesday: week_menu[2],
+            thursday: week_menu[3],
+            friday: week_menu[4],
+            saturday: week_menu[5],
+            sunday: week_menu[6]
+        }
+        const result = await user.save();
+
+        if (result == null) {
+            res.sendStatus(400);
+        } else {
+            console.log(macros_data)
+            res.json(week_menu);
+        }
 
     } else {
         res.sendStatus(400);
