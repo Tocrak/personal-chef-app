@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Personal Chef</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+
+        <h1>Welcome to Personal Chef!</h1>
+
+        <div class="menu">
+            <button v-on:click="logout()">Log Out</button>
+
+            <button v-on:click="enableModal('update_password')">Update Password</button>
+    
+            <button v-on:click="enableModal('delete_account')">Delete Account</button>
+
+            <button v-on:click="enableModal('submit_info')">Create Week Menu</button>
+        </div>
+        
+    
+        <modal v-if="modal_active" v-bind:modal_type="modal_type" v-on:close="modal_active = false" v-on:button_action="processModalAction">
+        </modal>
+
+    </div>
+	<script src="https://unpkg.com/vue"></script>
+    <script src="modal.js"></script>
+	<script src="app.js"></script>
+</body>
+</html>
