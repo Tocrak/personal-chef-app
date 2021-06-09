@@ -129,6 +129,8 @@ Vue.component('modal', {
                                 <input type="radio" id="extreme" name="activity_level" value="1.9">
                                 <label for="extreme">Extremely Active</label>
                             </div>
+
+                            <!--
                             Diet:<br>
                             <div>
                                 <input type="radio" id="anything" name="preset_diet" value="anything">
@@ -144,6 +146,7 @@ Vue.component('modal', {
                                 <input type="radio" id="mediterranean" name="preset_diet" value="mediterranean">
                                 <label for="mediterranean">Mediterranean</label>
                             </div>
+                            -->
                         </form>
                     </div>
 
@@ -213,7 +216,7 @@ Vue.component('modal', {
                         this.$emit('button_action', this.type, {
                             "age": form_data.age.value, "weight": form_data.weight.value, "height": form_data.height.value,
                             "gender": form_data.gender.value, "goal": form_data.goal.value, "bodyfat": form_data.bodyfat.value,
-                            "activity_level": form_data.activity_level.value, "preset_diet": form_data.preset_diet.value, "weight_goal": null,
+                            "activity_level": form_data.activity_level.value, "preset_diet": "anything", "weight_goal": null,
                             "weight_goal_weekly_value": null
                         });
                     } else {
