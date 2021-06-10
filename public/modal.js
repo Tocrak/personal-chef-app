@@ -42,101 +42,117 @@ Vue.component('modal', {
         <div class="modal-wrapper">
             <div class="modal-container">
                 <div class="modal-header">
-                    {{ display_values[type].header }}
+                    <h3>{{ display_values[type].header }}</h3>
                 </div>
 
                 <div class="modal-body">
                     <div v-if='type === "login"'>
-                        <form id="login_form">
-                            Username:<br>
-                            <input type="text" name="username"><br>
-                            Password:<br>
-                            <input type="text" name="password"><br>
+                        <form class="modal-form" id="login_form">
+                            <span>Username:</span>
+                            <input type="text" name="username">
+                            <span>Password:</span>
+                            <input type="text" name="password">
                         </form>
                     </div>
 
                     <div v-if='type === "register"'>
-                        <form id="register_form">
-                            Username:<br>
-                            <input type="text" name="username"><br>
-                            Password:<br>
-                            <input type="text" name="password1"><br>
-                            Repeat Password:<br>
-                            <input type="text" name="password2"><br>
-                        </form>
-                    </div>
-
-                    <div v-if='type === "reset_password"'>
-                        <form id="reset_password_form">
-
+                        <form class="modal-form" id="register_form">
+                            <span>Username:</span>
+                            <input type="text" name="username">
+                            <span>Password:</span>
+                            <input type="text" name="password1">
+                            <span>Repeat Password:</span>
+                            <input type="text" name="password2">
                         </form>
                     </div>
 
                     <div v-if='type === "update_password"'>
-                        <form id="update_password_form">
-                            Old Password:<br>
-                            <input type="text" name="password0"><br>
-                            New Password:<br>
-                            <input type="text" name="password1"><br>
-                            Repeat New Password:<br>
-                            <input type="text" name="password2"><br>
+                        <form class="modal-form" id="update_password_form">
+                            <span>Old Password:</span>
+                            <input type="text" name="password0">
+                            <span>New Password:</span>
+                            <input type="text" name="password1">
+                            <span>Repeat New Password:</span>
+                            <input type="text" name="password2">
                         </form>
                     </div>
 
                     <div v-if='type === "submit_info"'>
-                        <form id="submit_info_form">
-                            Age:<br>
-                            <input type="text" name="age"><br>
-                            Weight:<br>
-                            <input type="text" name="weight"><br>
-                            Height:<br>
-                            <input type="text" name="height"><br>
-                            Gender:<br>
+                        <form class="modal-form" id="submit_info_form">
+                            <span>Age:</span>
+                            <input type="text" name="age">
+                            <span>Weight:</span>
+                            <input type="text" name="weight">
+                            <span>Height:</span>
+                            <input type="text" name="height">
+                            <span>Gender:</span>
                             <div>
                                 <input type="radio" id="male" name="gender" value="M">
-                                <label for="male">Male</label><br>
+                                <label for="male">Male</label>
                                 <input type="radio" id="female" name="gender" value="G">
-                                <label for="female">Female</label><br>
+                                <label for="female">Female</label>
                             </div>
-                            Goal:<br>
-                            <div>
-                                <input type="radio" id="lose" name="goal" value="L">
-                                <label for="lose">Lose Weight</label><br>
-                                <input type="radio" id="maintain" name="goal" value="M">
-                                <label for="maintain">Maintain</label><br>
-                                <input type="radio" id="gain" name="goal" value="G">
-                                <label for="gain">Build Muscle</label>
+                            <span>Goal:</span>
+                            <div class="modal-form-radio">
+                                <div>
+                                    <input type="radio" id="lose" name="goal" value="L">
+                                    <label for="lose">Lose Weight</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="maintain" name="goal" value="M">
+                                    <label for="maintain">Maintain</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="gain" name="goal" value="G">
+                                    <label for="gain">Build Muscle</label>
+                                </div>
                             </div>
-                            Bodyfat:<br>
-                            <div>
-                                <input type="radio" id="low" name="bodyfat" value="10">
-                                <label for="low">Low (under 14%)</label><br>
-                                <input type="radio" id="medium" name="bodyfat" value="20">
-                                <label for="medium">Medium (14% to 22%)</label><br>
-                                <input type="radio" id="high" name="bodyfat" value="30">
-                                <label for="high">High (above 22%)</label>
+                            <span>Bodyfat:</span>
+                            <div class="modal-form-radio">
+                                <div>
+                                    <input type="radio" id="low" name="bodyfat" value="10">
+                                    <label for="low">Low (under 14%)</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="medium" name="bodyfat" value="20">
+                                    <label for="medium">Medium (14% to 22%)</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="high" name="bodyfat" value="30">
+                                    <label for="high">High (above 22%)</label>
+                                </div>
                             </div>
-                            Activity Level:<br>
-                            <div>
-                                <input type="radio" id="sedentary" name="activity_level" value="1.2">
-                                <label for="sedentary">Sedentary</label><br>
-                                <input type="radio" id="light" name="activity_level" value="1.375">
-                                <label for="light">Lightly Active</label><br>
-                                <input type="radio" id="moderate" name="activity_level" value="1.55">
-                                <label for="moderate">Moderately Active</label>
-                                <input type="radio" id="very" name="activity_level" value="1.725">
-                                <label for="very">Very Active</label>
-                                <input type="radio" id="extreme" name="activity_level" value="1.9">
-                                <label for="extreme">Extremely Active</label>
+                            <span>Activity Level:</span>
+                            <div class="modal-form-radio">
+                                <div>
+                                    <input type="radio" id="sedentary" name="activity_level" value="1.2">
+                                    <label for="sedentary">Sedentary</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="light" name="activity_level" value="1.375">
+                                    <label for="light">Lightly Active</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="moderate" name="activity_level" value="1.55">
+                                    <label for="moderate">Moderately Active</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="very" name="activity_level" value="1.725">
+                                    <label for="very">Very Active</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="extreme" name="activity_level" value="1.9">
+                                    <label for="extreme">Extremely Active</label>
+                                </div>
                             </div>
 
                             <!--
-                            Diet:<br>
+                            Diet:
                             <div>
                                 <input type="radio" id="anything" name="preset_diet" value="anything">
-                                <label for="anything">Anything</label><br>
+                                <label for="anything">Anything</label>
                                 <input type="radio" id="paleo" name="preset_diet" value="paleo">
-                                <label for="paleo">Paleo</label><br>
+                                <label for="paleo">Paleo</label>
                                 <input type="radio" id="vegetarian" name="preset_diet" value="vegetarian">
                                 <label for="vegetarian">Vegetarian</label>
                                 <input type="radio" id="vegan" name="preset_diet" value="vegan">
@@ -152,17 +168,17 @@ Vue.component('modal', {
 
                     <div v-if='type === "delete_account"'>
                         <form id="delete_account_form">
-                            Password:<br>
-                            <input type="text" name="password"><br>
+                            <span>Password:</span>
+                            <input type="text" name="password">
                         </form>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button class="modal-default-button" v-on:click="buttonAction(0)">
+                    <button class="modal-default-button, modal-button-left" v-on:click="buttonAction(0)">
                         {{ display_values[type].footer_button1 }}
                     </button>
-                    <button class="modal-default-button" v-on:click="buttonAction(1)">
+                    <button class="modal-default-button, modal-button-right" v-on:click="buttonAction(1)">
                         {{ display_values[type].footer_button2 }}
                     </button>
                 </div>

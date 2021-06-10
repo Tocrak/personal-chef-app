@@ -9,25 +9,28 @@
 <body>
     <div id="app">
 
-        <h1>Welcome to Personal Chef!</h1>
+        <div class="header">
+            <h1>Welcome to Personal Chef!</h1>
+            <h5>Proof of Concept</h5>
+        </div>
+        
+        <div class="main-menu">
+            <button class="main-menu-button" v-on:click="enableModal('submit_info')">Create Week Menu</button>
 
-        <div class="menu">
-            <button v-on:click="sendRequest('logout')">Log Out</button>
-
-            <button v-on:click="enableModal('update_password')">Update Password</button>
+            <button class="main-menu-button" v-on:click="enableModal('update_password')">Update Password</button>
     
-            <button v-on:click="enableModal('delete_account')">Delete Account</button>
+            <button class="main-menu-button" v-on:click="enableModal('delete_account')">Delete Account</button>
 
-            <button v-on:click="enableModal('submit_info')">Create Week Menu</button>
+            <button class="main-menu-button" v-on:click="sendRequest('logout')">Log Out</button>
         </div>
 
 
         <div class="week-menu">
-            <div v-for="(day, day_name) in week_menu">
-                <h3>{{ day_name }}:</h3>
-                <div v-for="item in day">
-                    Name: {{ item.name }}<br>
-                    Calories: {{ item.calories }}<br>
+            <div class="day-menu" v-for="(day, day_name) in week_menu">
+                <h3>{{ day_name.toUpperCase() }}:</h3>
+                <div class="menu-item" v-for="item in day">
+                    <span>Name:</span> {{ item.name }}<br>
+                    <span>Calories:</span> {{ item.calories }}<br>
                 </div><br>
             </div><br><br><br>
         </div>
