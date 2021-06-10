@@ -1,26 +1,13 @@
 const express = require('express'),
       User = require('../models/user'),
+      utils = require('../utils/utils'),
       user = express.Router();
-
 
 user.use(express.json());
 
-user.get('/check', async (req, res) => {
-    try {
-        const result = await User.find();
-
-        if (result == null) {
-            res.sendStatus(404);
-        } else {
-            res.json(result);
-        }
-    } catch (error) {
-        res.status(400).send(error);
-    }
-});
-
 user.post('/login', async (req, res) => {
-    const user = await User.findOne({username: req.body.username})
+    const data = utils.decodeRequestBody(req.body)
+    const user = await User.findOne({username: data.username})
 
     if (user == null) {
         // 'User doesn\'t exist';
@@ -30,9 +17,12 @@ user.post('/login', async (req, res) => {
             if (err) throw err;
 
             if (isMatch) {
-                req.session.user = user._id;
-                res.cookie('user', user._id)
+                const token = utils.generateAccessToken({ username: data.username });
+                // req.session.cookie.user = user._id;
+                res.cookie('user', user._id, {maxAge: 1800 * 1000})
+                res.cookie('auth-token', token, {maxAge: 1800* 1000, httpOnly: true})
                 res.sendStatus(200);
+                // res.json(token);
             } else {
                 // 'Incorrect password'
                 res.sendStatus(406);
@@ -42,7 +32,8 @@ user.post('/login', async (req, res) => {
 });
 
 user.post('/register', async (req, res) => {
-    const user = await User.findOne({username: req.body.username})
+    const data = utils.decodeRequestBody(req.body)
+    const user = await User.findOne({username: data.username})
 
     if (user != null && user.username == req.body.username) {
         // 'User already exist';
@@ -53,35 +44,39 @@ user.post('/register', async (req, res) => {
             res.sendStatus(406);
         } else {
             const user = new User({
-                username: req.body.username,
-                password: req.body.password1
+                username: data.username,
+                password: data.password1
             });
             const result = await user.save();   
 
             if (result == null) {
                 res.sendStatus(400);
-            } else {
-                req.session.user = user._id;
-                res.cookie('user', user._id)
+            } else {                
+                const token = utils.generateAccessToken({ username: data.username });
+                // req.session.user = user._id;
+                res.cookie('user', user._id, {maxAge: 1800 * 1000})
+                res.cookie('auth-token', token, {maxAge: 1800 * 1000, httpOnly: true})
                 res.sendStatus(200);
+                // res.json(token)
             }
         }
     }
 });
 
-user.patch('/updatePassword', async (req, res) => {
-    const user = await User.findById(req.session.user)
+user.patch('/updatePassword', utils.authenticateToken, async (req, res) => {
+    const data = utils.decodeRequestBody(req.body)
+    const user = await User.findById(req.cookies.user)
 
     if (user != null) {
-    await user.comparePassword(req.body.password0, async (err, isMatch) => { 
+    await user.comparePassword(data.password0, async (err, isMatch) => { 
         if (err) throw err;
 
         if (isMatch) {
-            if (req.body.password1 != req.body.password2) {
+            if (data.password1 != data.password2) {
                 // 'Password doesn\'t match'
                 res.sendStatus(406);
             } else {
-                user.password = req.body.password1
+                user.password = data.password1
                 const result = await user.save();   
 
                 if (result == null) {
@@ -100,18 +95,19 @@ user.patch('/updatePassword', async (req, res) => {
     }
 });
 
-user.delete('/deleteAccount', async (req, res) => {
-    const user = await User.findById(req.session.user)
+user.delete('/deleteAccount', utils.authenticateToken, async (req, res) => {
+    const data = utils.decodeRequestBody(req.body)
+    const user = await User.findById(req.cookies.user)
 
     if (user != null) {
-        await user.comparePassword(req.body.password, async (err, isMatch) => { 
+        await user.comparePassword(data.password, async (err, isMatch) => { 
         if (err) throw err;
 
         if (isMatch) {
             await User.findByIdAndDelete(user._id);
-            req.session.user = null;
-            res.clearCookie('user')
-            req.session.destroy();
+            // req.session.user = null;
+            res.clearCookie('user');
+            res.clearCookie('auth-token');
             res.sendStatus(200);
         } else {
             // 'Incorrect password'
@@ -123,13 +119,11 @@ user.delete('/deleteAccount', async (req, res) => {
     }
 });
 
-user.post('/logout', async (req, res) => {
-    req.session.user = null;
-    res.clearCookie('user')
-    req.session.destroy();
+user.post('/logout', utils.authenticateToken, async (req, res) => {
+    // req.session.cookie.user = null;
+    res.clearCookie('user');
+    res.clearCookie('auth-token');
     res.sendStatus(200);
-
 });
-
 
 module.exports = user;

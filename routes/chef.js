@@ -1,6 +1,7 @@
 const express = require('express'),
     User = require('../models/user'),
     food_dataset = require('../dataset/food_dataset.json'),
+    utils = require('../utils/utils'),
     chef = express.Router();
 
 function getRandomNumber(min, max) {
@@ -124,22 +125,14 @@ async function createMenu(macros_data) {
 
 }
 
-function convertCmToInch(val) {
-    return parseFloat(val / 2.54).toFixed(1)
-}
-
-function convertKgToLbs(val) {
-    return parseFloat(val * 2.205).toFixed(1)
-}
-
-chef.post('/createMenu', async (req, res) => {
-    const user = await User.findById(req.session.user)
+chef.post('/createMenu', utils.authenticateToken, async (req, res) => {
     const data = req.body;
+    const user = await User.findById(req.cookies.user)
 
     if (user != null) {
 
-        let macros_data = calculateMacros(data.age, convertKgToLbs(data.weight),
-            convertCmToInch(data.height), data.gender, data.goal,
+        let macros_data = calculateMacros(data.age, utils.convertKgToLbs(data.weight),
+            utils.convertCmToInch(data.height), data.gender, data.goal,
             data.bodyfat, data.activity_level, data.preset_diet, data.weight_goal,
             data.weight_goal_weekly_value);
 
@@ -160,11 +153,25 @@ chef.post('/createMenu', async (req, res) => {
             res.sendStatus(400);
         } else {
             console.log(macros_data)
-            res.json(week_menu);
+            res.json(user.menu);
         }
 
     } else {
         res.sendStatus(400);
+    }
+});
+
+chef.get('/load', utils.authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.cookies.user)
+
+        if (user == null) {
+            res.sendStatus(404);
+        } else {
+            res.json(user.menu);
+        }
+    } catch (error) {
+        res.status(400).send(error);
     }
 });
 
