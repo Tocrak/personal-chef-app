@@ -1,6 +1,6 @@
 const express = require('express'),
       mongoose = require('mongoose'),
-      session = require('express-session'),
+      cookieParser = require('cookie-parser');
 
       account = require('./routes/account'),
       chef = require('./routes/chef'),
@@ -23,14 +23,7 @@ db.once('open', () => console.log('Connected to mongo'));
 
 app.use(express.static('public'));
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-
-app.use(session({
-    secret: 'wadica',
-    resave: true,
-    saveUninitialized: true,
-    cookie: {}
-}));
+app.use(cookieParser())
 
 app.use('/api', account)
 app.use('/api', chef)
