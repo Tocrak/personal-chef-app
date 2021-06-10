@@ -1,4 +1,5 @@
 const getCookieValue = (name) => (document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || '')
+const deleteCookie = (name) => (document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;')
 
 var vue = new Vue({
 	el: '#app',
@@ -47,7 +48,6 @@ var vue = new Vue({
 	},
 
 	mounted: async function() {
-        console.log(document.cookie)
         if (getCookieValue('user') === "") {
             this.enableModal('login');
         } else {
@@ -112,7 +112,10 @@ var vue = new Vue({
 				if (response.status == 200) {
                     this.modal_active = false;
                     await this.processSuccessfulRequest(type, response);
-				} else {
+				} else if (response.status == 401) {
+                    deleteCookie('user');
+                    window.location.reload();
+                } else {
 					alert('Response error: ' + response.status);
 				}
 			} catch (e) {
