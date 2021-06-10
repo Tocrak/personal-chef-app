@@ -35,6 +35,10 @@ const utils = class {
     static convertKgToLbs(val) {
         return parseFloat(val * 2.205).toFixed(1)
     }
+
+    static convertKjToCal(val) {
+        return parseInt(val * 0.239)
+    }
 }
 
 module.exports = utils;
