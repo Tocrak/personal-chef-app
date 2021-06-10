@@ -1,4 +1,5 @@
 const  jwt = require('jsonwebtoken');
+const  atob = require('atob');
 
 const utils = class {
     static generateAccessToken(username) {
