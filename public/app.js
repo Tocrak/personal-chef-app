@@ -6,13 +6,16 @@ var vue = new Vue({
 	el: '#app',
 	data: {
 		modal_active: false,
-        modal_type: ""
+        modal_type: "",
+        week_menu: {}
 	},
 
 	mounted: async function() {
         console.log(document.cookie)
         if (getCookieValue('user') === "") {
             this.enableModal('login');
+        } else {
+            await this.load();
         }
 	},
 
@@ -20,6 +23,12 @@ var vue = new Vue({
         enableModal: function(type) {
             this.modal_type = type;
             this.modal_active = true;
+        },
+        encodeRequestBody: function(data) {
+            for (let key in data) {
+                data[key] = btoa(data[key]);
+            }
+            return data;
         },
         processModalAction: function(type, data) {
             switch (type) {
@@ -53,7 +62,8 @@ var vue = new Vue({
 					headers: {
 						'Content-Type': 'application/json',
 						'Accept': 'application/json',
-						'Access-Control-Allow-Origin': '*'
+						'Access-Control-Allow-Origin': '*',
+                        'Auth-Token': getCookieValue("token")
 					}
 				});
 
@@ -66,6 +76,33 @@ var vue = new Vue({
 				alert(e);
 			}
         },
+        load: async function() {
+
+			const url = `${window.location.origin}/api/load`;
+            
+			try {
+				let response = await fetch(url, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						'Accept': 'application/json',
+						'Access-Control-Allow-Origin': '*',
+                        'Auth-Token': getCookieValue("token")
+					}
+				});
+
+				if (response.status == 200) {
+					await response.json().then(data => {
+						this.week_menu = data;
+					})
+				} else {
+					alert('Response error: ' + response.status);
+				}
+			
+			} catch (e) {
+				alert(e);
+			}
+		},
         login: async function(credentials) {
 
 			const url = `${window.location.origin}/api/login`;
@@ -78,11 +115,12 @@ var vue = new Vue({
 						'Accept': 'application/json',
 						'Access-Control-Allow-Origin': '*'
 					},
-                    body: JSON.stringify(credentials)
+                    body: JSON.stringify(this.encodeRequestBody(credentials))
 				});
 
 				if (response.status == 200) {
 					this.modal_active = false;
+                    await this.load();
 				} else {
 					alert('Response error: ' + response.status);
 				}
@@ -102,11 +140,12 @@ var vue = new Vue({
 						'Accept': 'application/json',
 						'Access-Control-Allow-Origin': '*'
 					},
-                    body: JSON.stringify(credentials)
+                    body: JSON.stringify(this.encodeRequestBody(credentials))
 				});
 
 				if (response.status == 200) {
-					this.modal_active = false;
+                    this.modal_active = false;
+                    await this.load();
 				} else {
 					alert('Response error: ' + response.status);
 				}
@@ -124,9 +163,10 @@ var vue = new Vue({
 					headers: {
 						'Content-Type': 'application/json',
 						'Accept': 'application/json',
-						'Access-Control-Allow-Origin': '*'
+						'Access-Control-Allow-Origin': '*',
+                        'Auth-Token': getCookieValue("token")
 					},
-                    body: JSON.stringify(credentials)
+                    body: JSON.stringify(this.encodeRequestBody(credentials))
 				});
 
 				if (response.status == 200) {
@@ -148,7 +188,8 @@ var vue = new Vue({
 					headers: {
 						'Content-Type': 'application/json',
 						'Accept': 'application/json',
-						'Access-Control-Allow-Origin': '*'
+						'Access-Control-Allow-Origin': '*',
+                        'Auth-Token': getCookieValue("token")
 					},
                     body: JSON.stringify(credentials)
 				});
@@ -172,7 +213,8 @@ var vue = new Vue({
 					headers: {
 						'Content-Type': 'application/json',
 						'Accept': 'application/json',
-						'Access-Control-Allow-Origin': '*'
+						'Access-Control-Allow-Origin': '*',
+                        'Auth-Token': getCookieValue("token")
 					},
                     body: JSON.stringify(data)
 				});
@@ -180,7 +222,7 @@ var vue = new Vue({
 				if (response.status == 200) {
 					this.modal_active = false;
                     await response.json().then(data => {
-						console.log(data)
+						this.week_menu = data;
 					})
 				} else {
 					alert('Response error: ' + response.status);

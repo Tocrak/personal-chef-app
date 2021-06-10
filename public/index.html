@@ -20,6 +20,17 @@
 
             <button v-on:click="enableModal('submit_info')">Create Week Menu</button>
         </div>
+
+
+        <div class="week-menu">
+            <div v-for="(day, day_name) in week_menu">
+                <h3>{{ day_name }}:</h3>
+                <div v-for="item in day">
+                    Name: {{ item.name }}<br>
+                    Calories: {{ item.calories }}<br>
+                </div><br>
+            </div><br><br><br>
+        </div>
         
     
         <modal v-if="modal_active" v-bind:modal_type="modal_type" v-on:close="modal_active = false" v-on:button_action="processModalAction">
