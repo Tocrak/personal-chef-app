@@ -99,27 +99,32 @@ async function createMenu(macros_data) {
 
 
     for (let i = 0; i < 7; i++) {
-        let current_callories = 0;
+        let current_callories = 0,
+            counter = 0 ;
         // current_fats = 0,
         // current_proteins = 0,
         // current_carbs = 0;
 
-        while (current_callories < req_calories * 0.9) {
-            let food_item = food_dataset[getRandomNumber(0, 14164)]
+        while (current_callories <= req_calories * 0.9) {
+            let food_item = food_dataset[getRandomNumber(0, food_dataset.length)]
+            let food_item_calories = utils.convertKjToCal(food_item.energy);
 
-            if (current_callories + food_item.Calories * 2 <= req_calories) {
+            if ((current_callories + food_item_calories <= req_calories) && food_item_calories >= parseInt(req_calories/5)) {
                 week_menu[i].push({
-                    name: food_item.Name,
-                    calories: food_item.Calories,
-                    carbs: food_item.Carbos,
-                    fats: food_item.Fats,
-                    proteins: food_item.Proteins,
-                    servings: 2
+                    name: food_item.name,
+                    calories: food_item_calories,
+                    carbs: food_item.carbohydrate,
+                    fats: food_item.fat,
+                    proteins: food_item.protein,
+                    servings: 1
                 });
-                current_callories += food_item.Calories * 2;
+                current_callories += food_item_calories;
+            } else if (counter > 500) {
+                break;
             }
-
+            counter++;
         }
+        counter = 0;
     }
     return week_menu;
 
@@ -152,7 +157,6 @@ chef.post('/createMenu', utils.authenticateToken, async (req, res) => {
         if (result == null) {
             res.sendStatus(400);
         } else {
-            console.log(macros_data)
             res.json(user.menu);
         }
 
@@ -161,7 +165,7 @@ chef.post('/createMenu', utils.authenticateToken, async (req, res) => {
     }
 });
 
-chef.get('/load', utils.authenticateToken, async (req, res) => {
+chef.get('/loadMenu', utils.authenticateToken, async (req, res) => {
     try {
         const user = await User.findById(req.cookies.user)
 
