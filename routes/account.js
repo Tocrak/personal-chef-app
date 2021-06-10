@@ -18,11 +18,9 @@ user.post('/login', async (req, res) => {
 
             if (isMatch) {
                 const token = utils.generateAccessToken({ username: data.username });
-                // req.session.cookie.user = user._id;
                 res.cookie('user', user._id, {maxAge: 1800 * 1000})
-                res.cookie('auth-token', token, {maxAge: 1800* 1000, httpOnly: true})
+                res.cookie('auth-token', token, {maxAge: 1800 * 1000, httpOnly: true})
                 res.sendStatus(200);
-                // res.json(token);
             } else {
                 // 'Incorrect password'
                 res.sendStatus(406);
@@ -40,7 +38,7 @@ user.post('/register', async (req, res) => {
         res.sendStatus(400);
     } else {
         if (req.body.password1 != req.body.password2) {
-            // 'Password doesn\'t match'
+            // 'Passwords don\'t match'
             res.sendStatus(406);
         } else {
             const user = new User({
@@ -53,11 +51,9 @@ user.post('/register', async (req, res) => {
                 res.sendStatus(400);
             } else {                
                 const token = utils.generateAccessToken({ username: data.username });
-                // req.session.user = user._id;
                 res.cookie('user', user._id, {maxAge: 1800 * 1000})
                 res.cookie('auth-token', token, {maxAge: 1800 * 1000, httpOnly: true})
                 res.sendStatus(200);
-                // res.json(token)
             }
         }
     }
@@ -105,7 +101,6 @@ user.delete('/deleteAccount', utils.authenticateToken, async (req, res) => {
 
         if (isMatch) {
             await User.findByIdAndDelete(user._id);
-            // req.session.user = null;
             res.clearCookie('user');
             res.clearCookie('auth-token');
             res.sendStatus(200);
@@ -120,7 +115,6 @@ user.delete('/deleteAccount', utils.authenticateToken, async (req, res) => {
 });
 
 user.post('/logout', utils.authenticateToken, async (req, res) => {
-    // req.session.cookie.user = null;
     res.clearCookie('user');
     res.clearCookie('auth-token');
     res.sendStatus(200);
