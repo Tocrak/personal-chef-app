@@ -13,6 +13,7 @@
     "are-we-there-yet": "^1.1.5",
     "array-flatten": "^1.1.1",
     "async": "^0.9.2",
+    "atob": "^2.1.2",
     "balanced-match": "^1.0.0",
     "bcrypt": "^5.0.1",
     "bl": "^2.2.1",
