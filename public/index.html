@@ -12,7 +12,7 @@
         <h1>Welcome to Personal Chef!</h1>
 
         <div class="menu">
-            <button v-on:click="logout()">Log Out</button>
+            <button v-on:click="sendRequest('logout')">Log Out</button>
 
             <button v-on:click="enableModal('update_password')">Update Password</button>
     
@@ -33,7 +33,7 @@
         </div>
         
     
-        <modal v-if="modal_active" v-bind:modal_type="modal_type" v-on:close="modal_active = false" v-on:button_action="processModalAction">
+        <modal v-if="modal_active" v-bind:modal_type="modal_type" v-on:close="modal_active = false" v-on:button_action="sendRequest">
         </modal>
 
     </div>
