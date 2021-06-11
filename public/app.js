@@ -62,7 +62,6 @@ var vue = new Vue({
         } else {
             await this.sendRequest('load_menu');
         }
-        console.log(this.current_day)
 	},
 
 	methods: {
