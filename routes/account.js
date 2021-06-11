@@ -65,7 +65,7 @@ user.patch('/updatePassword', utils.authenticateToken, async (req, res) => {
 
         if (isMatch) {
             if (data.password1 != data.password2) {
-                res.status(406).json({message: 'Passwords doesn\'t match'});
+                res.status(406).json({message: 'Passwords don\'t match'});
             } else {
                 user.password = data.password1
                 const result = await user.save();   
