@@ -272,9 +272,10 @@ Vue.component('modal', {
                 break;
             }
             
-            if (this.validateData(data) && data) {
+            const data_validated = this.validateData(data);
+            if (data_validated && data) {
                 this.$emit('button_action', this.type, data);
-            } else {
+            } else if (!data_validated) {
                 this.$emit('empty_fields');
             }
         }
