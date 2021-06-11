@@ -51,16 +51,22 @@ button {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     align-content: space-between;
-    max-width: 80vw;
+    max-width: 84vw;
 }
 
 .day-menu {
-    width: 25vw;
+    width: 24vw;
     font-size: 1.2rem;
-    margin: 0.2rem 0.5rem;
+    margin: 0.4rem 0.2rem;
+    padding: 1.2rem;
+    background-color: rgb(122, 206, 147);
+}
+
+.current-day {
+    background-color: rgb(122, 200, 206);
 }
 
 .menu-item {

@@ -26,7 +26,8 @@
 
 
         <div class="week-menu">
-            <div class="day-menu" v-for="(day, day_name) in week_menu">
+            <div class="day-menu" v-for="(day, day_name) in week_menu" 
+                 v-bind:class="(current_day===day_name)?'current-day':''">
                 <h3>{{ day_name.toUpperCase() }}:</h3>
                 <div>
                     <div class="menu-item" v-for="item in day">

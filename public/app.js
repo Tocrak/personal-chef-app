@@ -45,7 +45,15 @@ var vue = new Vue({
 		modal_active: false,
         modal_type: "",
         week_menu: {},
-        server_error_response: ''
+        server_error_response: '',
+        current_day: [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"][new Date().getDay()]
 	},
 
 	mounted: async function() {
@@ -54,6 +62,7 @@ var vue = new Vue({
         } else {
             await this.sendRequest('load_menu');
         }
+        console.log(this.current_day)
 	},
 
 	methods: {
