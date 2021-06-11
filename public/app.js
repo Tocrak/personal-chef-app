@@ -72,6 +72,7 @@ var vue = new Vue({
                 case "register":
                     await this.sendRequest('load_menu');
                 break;
+                case "logout":
                 case "delete_account":
                 case "update_password":
                     window.location.reload()

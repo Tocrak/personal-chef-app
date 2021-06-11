@@ -33,7 +33,8 @@ Vue.component('modal', {
                 'footer_button2': 'Cancel'
              }
             },
-            'type': this.modal_type
+            'type': this.modal_type,
+            'show_modal_error': false
         }
     },
     template: `
@@ -46,6 +47,8 @@ Vue.component('modal', {
                 </div>
 
                 <div class="modal-body">
+                    <span v-if='show_modal_error' class='modal-error'>Fill Empty Fields</span>
+
                     <div v-if='type === "login"'>
                         <form class="modal-form" id="login_form">
                             <span>Username:</span>
@@ -190,12 +193,29 @@ Vue.component('modal', {
         
     },
     methods: {
+        validateData: function(data) {
+            let validated = true;
+
+            for (key in data) {
+                if (data[key] === "") {
+                    validated = false;
+                    break
+                }
+            }
+
+            return validated;
+        },
         buttonAction: function(index) {
+            let data;
+
             switch (this.type) {
                 case "login":
                     form_data = document.getElementById('login_form')
                     if (index == 0) {
-                        this.$emit('button_action', this.type, {"username": form_data.username.value, "password": form_data.password.value});
+                        data = {
+                            "username": form_data.username.value,
+                            "password": form_data.password.value
+                        };                       
                     } else {
                         this.type = "register";
                     }
@@ -203,25 +223,23 @@ Vue.component('modal', {
                 case "register":
                     form_data = document.getElementById('register_form')
                     if (index == 0) {
-                        this.$emit('button_action', this.type, {"username": form_data.username.value,
-                         "password1": form_data.password1.value, "password2": form_data.password2.value});
+                        data = {
+                            "username": form_data.username.value,
+                            "password1": form_data.password1.value, 
+                            "password2": form_data.password2.value
+                        }
                     } else {
                         this.type = "login";
-                    }
-                break;
-                case "reset_password":
-                    form_data = document.getElementById('reset_password_form')
-                    if (index == 0) {
-                        this.$emit('button_action', this.type, {"email": 0});
-                    } else {
-                        this.$emit('close');
                     }
                 break;
                 case "update_password":
                     form_data = document.getElementById('update_password_form')
                     if (index == 0) {
-                        this.$emit('button_action', this.type, {"password0": form_data.password0.value,
-                         "password1": form_data.password1.value, "password2": form_data.password2.value});
+                        data = {
+                            "password0": form_data.password0.value, 
+                            "password1": form_data.password1.value, 
+                            "password2": form_data.password2.value
+                        }
                     } else {
                         this.$emit('close');
                     }
@@ -229,12 +247,17 @@ Vue.component('modal', {
                 case "submit_info":
                     form_data = document.getElementById('submit_info_form')
                     if (index == 0) {
-                        this.$emit('button_action', this.type, {
-                            "age": form_data.age.value, "weight": form_data.weight.value, "height": form_data.height.value,
-                            "gender": form_data.gender.value, "goal": form_data.goal.value, "bodyfat": form_data.bodyfat.value,
-                            "activity_level": form_data.activity_level.value, "preset_diet": "anything", "weight_goal": null,
-                            "weight_goal_weekly_value": null
-                        });
+                        data = {
+                            "age": form_data.age.value, 
+                            "weight": form_data.weight.value, 
+                            "height": form_data.height.value,
+                            "gender": form_data.gender.value, 
+                            "goal": form_data.goal.value, 
+                            "bodyfat": form_data.bodyfat.value,
+                            "activity_level": form_data.activity_level.value, 
+                            "preset_diet": "anything", "weight_goal": NaN,
+                            "weight_goal_weekly_value": NaN
+                        }
                     } else {
                         this.$emit('close');
                     }
@@ -242,11 +265,19 @@ Vue.component('modal', {
                 case "delete_account":
                     form_data = document.getElementById('delete_account_form')
                     if (index == 0) {
-                        this.$emit('button_action', this.type, {"password": form_data.password.value});
+                        data = {
+                            "password": form_data.password.value
+                        }
                     } else {
                         this.$emit('close');
                     }
                 break;
+            }
+            
+            if (this.validateData(data) && data) {
+                this.$emit('button_action', this.type, data);
+            } else {
+                this.show_modal_error = true;
             }
         }
     }
