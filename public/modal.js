@@ -85,9 +85,9 @@ Vue.component('modal', {
                         <form class="modal-form" id="submit_info_form">
                             <span>Age:</span>
                             <input type="text" name="age">
-                            <span>Weight:</span>
+                            <span>Weight (metric):</span>
                             <input type="text" name="weight">
-                            <span>Height:</span>
+                            <span>Height (metric):</span>
                             <input type="text" name="height">
                             <span>Gender:</span>
                             <div>

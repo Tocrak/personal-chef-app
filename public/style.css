@@ -1,8 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@400;700&display=swap');
 
 body {
+    color: rgba(255, 255, 255);
     margin: 0;
     font-family: 'Yanone Kaffeesatz', sans-serif;
+    background: url('./media/main-bg.jpeg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 /* Header Settings */
@@ -37,6 +42,9 @@ h5 {
 }
 
 button {
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 700;
     margin: 1rem 0.5rem;
     padding: 0.75rem;
     border-radius: 0.6rem;
@@ -54,23 +62,23 @@ button {
     align-items: stretch;
     justify-content: center;
     align-content: space-between;
-    max-width: 84vw;
+    max-width: 86vw;
 }
 
 .day-menu {
     width: 24vw;
     font-size: 1.2rem;
-    margin: 0.4rem 0.2rem;
+    margin: 0.4rem;
     padding: 1.2rem;
-    background-color: rgb(122, 206, 147);
+    background-color: rgb(139,69,19);
 }
 
 .current-day {
-    background-color: rgb(122, 200, 206);
+    background-color: rgb(85,107,47);
 }
 
 .menu-item {
-    margin: 0.5rem 0;
+    margin: 0.5rem;
 }
 
 .day-menu h3 {
@@ -110,7 +118,7 @@ button {
     max-height: 80vh;
     margin: 0px auto;
     padding: 1.2rem 1.4rem;
-    background-color: #fff;
+    background-color: rgb(131,105,83);
     border-radius: 1rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.4s ease;
@@ -148,8 +156,9 @@ button {
 }
 
 .modal-form span {
+    font-size: 1.8rem;
     font-weight: 700;
-    margin: 1rem 0;
+    margin: 0.5rem 0 1rem 0;
 }
   
 .modal-default-button {
@@ -161,6 +170,7 @@ button {
 }
 
 input {
+    height: 1.2rem;
     margin: 0.5rem;
 }
 
