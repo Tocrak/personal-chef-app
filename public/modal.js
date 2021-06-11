@@ -179,10 +179,11 @@ Vue.component('modal', {
                 </div>
 
                 <div class="modal-footer">
-                    <button class="modal-default-button, modal-button-left" v-on:click="buttonAction(0)">
+                    <button v-on:click="buttonAction(0)">
                         {{ display_values[type].footer_button1 }}
                     </button>
-                    <button class="modal-default-button, modal-button-right" v-on:click="buttonAction(1)">
+                    <button v-on:click="buttonAction(1)"
+                    v-bind:class="(modal_type!=='login' && modal_type!=='register')?'modal-back-button':''">
                         {{ display_values[type].footer_button2 }}
                     </button>
                 </div>
