@@ -85,7 +85,6 @@ function calculateMacros(a, b, c, d, e, f, g, h, l, k) {
 function getCaloriesFromMacros(carbs, fats, proteins) {
     return 4 * carbs + 9 * fats + 4 * proteins
 }
-// 14164
 
 async function createMenu(macros_data) {
     let req_calories = macros_data.calories,
@@ -155,13 +154,13 @@ chef.post('/createMenu', utils.authenticateToken, async (req, res) => {
         const result = await user.save();
 
         if (result == null) {
-            res.sendStatus(400);
+            res.status(406).json({message: 'Unable to save to database'});
         } else {
             res.json(user.menu);
         }
 
     } else {
-        res.sendStatus(400);
+        res.status(406).json({message: 'User not found'});
     }
 });
 
@@ -170,12 +169,12 @@ chef.get('/loadMenu', utils.authenticateToken, async (req, res) => {
         const user = await User.findById(req.cookies.user)
 
         if (user == null) {
-            res.sendStatus(404);
+            res.status(406).json({message: 'User not found'});
         } else {
             res.json(user.menu);
         }
     } catch (error) {
-        res.status(400).send(error);
+        res.status(500).json({message: 'Database Unavailable'});
     }
 });
 

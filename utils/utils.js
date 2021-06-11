@@ -9,12 +9,12 @@ const utils = class {
     static authenticateToken(req, res, next) {
         const token = req.cookies['auth-token']
     
-        if (token == null) return res.sendStatus(401)
+        if (token == null) return res.status(401).json({message: 'Unauthorized'});
         
         jwt.verify(token, process.env.TOKEN_SECRET || 'abc', (err, user) => {
             if (err) {
                 console.log(err)
-                return res.sendStatus(403)
+                return res.status(403).json({message: 'Forbidden'});
             }
             req.user = user
             next()

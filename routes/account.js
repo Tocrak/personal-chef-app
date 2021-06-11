@@ -10,8 +10,7 @@ user.post('/login', async (req, res) => {
     const user = await User.findOne({username: data.username})
 
     if (user == null) {
-        // 'User doesn\'t exist';
-        res.sendStatus(406);
+        res.status(406).json({message: 'User doesn\'t exist'});
     } else {
         user.comparePassword(req.body.password, (err, isMatch) => { 
             if (err) throw err;
@@ -22,8 +21,7 @@ user.post('/login', async (req, res) => {
                 res.cookie('auth-token', token, {maxAge: 1800 * 1000, httpOnly: true})
                 res.sendStatus(200);
             } else {
-                // 'Incorrect password'
-                res.sendStatus(406);
+                res.status(406).json({message: 'Incorrect password'});
             }
         })
     }
@@ -34,12 +32,10 @@ user.post('/register', async (req, res) => {
     const user = await User.findOne({username: data.username})
 
     if (user != null && user.username == req.body.username) {
-        // 'User already exist';
-        res.sendStatus(400);
+        res.status(406).json({message: 'User already exist'});
     } else {
         if (req.body.password1 != req.body.password2) {
-            // 'Passwords don\'t match'
-            res.sendStatus(406);
+            res.status(406).json({message: 'Passwords don\'t match'});
         } else {
             const user = new User({
                 username: data.username,
@@ -48,7 +44,7 @@ user.post('/register', async (req, res) => {
             const result = await user.save();   
 
             if (result == null) {
-                res.sendStatus(400);
+                res.status(500).json({message: 'Unable to save to database'});
             } else {                
                 const token = utils.generateAccessToken({ username: data.username });
                 res.cookie('user', user._id, {maxAge: 1800 * 1000})
@@ -69,25 +65,23 @@ user.patch('/updatePassword', utils.authenticateToken, async (req, res) => {
 
         if (isMatch) {
             if (data.password1 != data.password2) {
-                // 'Password doesn\'t match'
-                res.sendStatus(406);
+                res.status(406).json({message: 'Passwords doesn\'t match'});
             } else {
                 user.password = data.password1
                 const result = await user.save();   
 
                 if (result == null) {
-                    res.sendStatus(400);
+                    res.status(500).json({message: 'Unable to save to database'});
                 } else {
                     res.sendStatus(200);
                 }
             }
         } else {
-            // 'Incorrect password'
-            res.sendStatus(406);
+            res.status(406).json({message: 'Incorrect password'});
         }
     })
     } else {
-        res.sendStatus(400);
+        res.status(406).json({message: 'User not found'});
     }
 });
 
@@ -105,12 +99,11 @@ user.delete('/deleteAccount', utils.authenticateToken, async (req, res) => {
             res.clearCookie('auth-token');
             res.sendStatus(200);
         } else {
-            // 'Incorrect password'
-            res.sendStatus(406);
+            res.status(406).json({message: 'Incorrect password'});
         }
     })
     } else {
-        res.sendStatus(400);
+        res.status(406).json({message: 'User not found'});
     }
 });
 

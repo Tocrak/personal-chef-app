@@ -36,7 +36,12 @@
         </div>
         
     
-        <modal v-if="modal_active" v-bind:modal_type="modal_type" v-on:close="modal_active = false" v-on:button_action="sendRequest">
+        <modal v-if="modal_active" 
+        v-bind:modal_type="modal_type" 
+        v-bind:modal_error_text="server_error_response" 
+        v-on:close="modal_active = false" 
+        v-on:button_action="sendRequest"
+        v-on:empty_fields="server_error_response = 'Fill empty fields'">
         </modal>
 
     </div>

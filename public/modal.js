@@ -1,5 +1,5 @@
 Vue.component('modal', {
-    props: ['modal_type'],
+    props: ['modal_type', 'modal_error_text'],
     data: function() {
         return {'display_values': {
             'login': {
@@ -34,7 +34,6 @@ Vue.component('modal', {
              }
             },
             'type': this.modal_type,
-            'show_modal_error': false
         }
     },
     template: `
@@ -47,7 +46,9 @@ Vue.component('modal', {
                 </div>
 
                 <div class="modal-body">
-                    <span v-if='show_modal_error' class='modal-error'>Fill Empty Fields</span>
+                    <span  class='modal-error'>
+                        {{ modal_error_text }}
+                    </span>
 
                     <div v-if='type === "login"'>
                         <form class="modal-form" id="login_form">
@@ -189,9 +190,6 @@ Vue.component('modal', {
         </div>
     </div>
 </transition>`,
-    created: function () {
-        
-    },
     methods: {
         validateData: function(data) {
             let validated = true;
@@ -277,7 +275,7 @@ Vue.component('modal', {
             if (this.validateData(data) && data) {
                 this.$emit('button_action', this.type, data);
             } else {
-                this.show_modal_error = true;
+                this.$emit('empty_fields');
             }
         }
     }

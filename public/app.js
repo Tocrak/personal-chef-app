@@ -44,7 +44,8 @@ var vue = new Vue({
         },
 		modal_active: false,
         modal_type: "",
-        week_menu: {}
+        week_menu: {},
+        server_error_response: ''
 	},
 
 	mounted: async function() {
@@ -58,6 +59,7 @@ var vue = new Vue({
 	methods: {
         enableModal: function(type) {
             this.modal_type = type;
+            this.server_error_response = '';
             this.modal_active = true;
         },
         encodeRequestBody: function(data) {
@@ -117,7 +119,9 @@ var vue = new Vue({
                     deleteCookie('user');
                     window.location.reload();
                 } else {
-					alert('Response error: ' + response.status);
+                    await response.json().then(data => {
+                        this.server_error_response = data.message;
+                    })
 				}
 			} catch (e) {
 				alert(e);
