@@ -108,7 +108,7 @@ async function createMenu(macros_data) {
             let food_item = food_dataset[getRandomNumber(0, food_dataset.length)]
             let food_item_calories = utils.convertKjToCal(food_item.energy);
 
-            if ((current_callories + food_item_calories <= req_calories) && food_item_calories >= parseInt(req_calories/5)) {
+            if ((current_callories + food_item_calories <= req_calories)) {
                 week_menu[i].push({
                     name: food_item.name,
                     calories: food_item_calories,
