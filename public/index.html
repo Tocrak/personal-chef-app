@@ -28,9 +28,11 @@
         <div class="week-menu">
             <div class="day-menu" v-for="(day, day_name) in week_menu">
                 <h3>{{ day_name.toUpperCase() }}:</h3>
-                <div class="menu-item" v-for="item in day">
-                    <span>Name:</span> {{ item.name }}<br>
-                    <span>Calories:</span> {{ item.calories }}<br>
+                <div>
+                    <div class="menu-item" v-for="item in day">
+                        <span>Name:</span> {{ item.name }}<br>
+                        <span>Calories:</span> {{ item.calories }}<br>
+                </div>
                 </div><br>
             </div><br><br><br>
         </div>
