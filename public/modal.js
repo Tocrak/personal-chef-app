@@ -55,7 +55,7 @@ Vue.component('modal', {
                             <span>Username:</span>
                             <input type="text" name="username">
                             <span>Password:</span>
-                            <input type="text" name="password">
+                            <input type="password" name="password">
                         </form>
                     </div>
 
@@ -64,31 +64,31 @@ Vue.component('modal', {
                             <span>Username:</span>
                             <input type="text" name="username">
                             <span>Password:</span>
-                            <input type="text" name="password1">
+                            <input type="password" name="password1">
                             <span>Repeat Password:</span>
-                            <input type="text" name="password2">
+                            <input type="password" name="password2">
                         </form>
                     </div>
 
                     <div v-if='type === "update_password"'>
                         <form class="modal-form" id="update_password_form">
                             <span>Old Password:</span>
-                            <input type="text" name="password0">
+                            <input type="password" name="password0">
                             <span>New Password:</span>
-                            <input type="text" name="password1">
+                            <input type="password" name="password1">
                             <span>Repeat New Password:</span>
-                            <input type="text" name="password2">
+                            <input type="password" name="password2">
                         </form>
                     </div>
 
                     <div v-if='type === "submit_info"'>
                         <form class="modal-form" id="submit_info_form">
                             <span>Age:</span>
-                            <input type="text" name="age">
+                            <input type="number" name="age">
                             <span>Weight (metric):</span>
-                            <input type="text" name="weight">
+                            <input type="number" name="weight">
                             <span>Height (metric):</span>
-                            <input type="text" name="height">
+                            <input type="number" name="height">
                             <span>Gender:</span>
                             <div>
                                 <input type="radio" id="male" name="gender" value="M">
@@ -173,7 +173,7 @@ Vue.component('modal', {
                     <div v-if='type === "delete_account"'>
                         <form id="delete_account_form">
                             <span>Password:</span>
-                            <input type="text" name="password">
+                            <input type="password" name="password">
                         </form>
                     </div>
                 </div>
